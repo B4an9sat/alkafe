@@ -1,8 +1,13 @@
 {{-- Logo dan Nama Aplikasi --}}
 <div class="flex items-center justify-center p-4 border-b border-gray-700">
     <a href="{{ route('dashboard') }}" class="flex items-center space-x-2">
-        <x-application-logo class="block h-9 w-auto fill-current text-gray-200" />
-        <span class="text-white text-xl font-semibold">{{ config('app.name', 'Laravel') }}</span>
+        {{-- Hapus atau komentari baris ini jika Anda tidak ingin menggunakan logo Laravel default --}}
+        {{-- <x-application-logo class="block h-9 w-auto fill-current text-gray-200" /> --}}
+
+        {{-- Ganti teks "Laravel" dengan "ALKAFE" --}}
+        <span class="text-white text-xl font-semibold">{{ __('ALKAFE') }}</span>
+        {{-- Atau jika Anda ingin menggunakan config: --}}
+        {{-- <span class="text-white text-xl font-semibold">{{ config('app.name', 'ALKAFE') }}</span> --}}
     </a>
 </div>
 
@@ -38,10 +43,6 @@
     <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
         {{ __('Manajemen Produk') }}
     </x-nav-link>
-    {{-- BARIS INI DIHAPUS: Link untuk Manajemen Pelanggan --}}
-    {{-- <x-nav-link :href="route('customers.index')" :active="request()->routeIs('customers.*')">
-        {{ __('Manajemen Pelanggan') }}
-    </x-nav-link> --}}
     <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
         {{ __('Manajemen Kategori') }}
     </x-nav-link>

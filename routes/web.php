@@ -6,7 +6,6 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,17 +33,19 @@ Route::middleware('auth')->group(function () {
 
     // --- Rute untuk Fungsionalitas POS (Point of Sale) ---
     // Halaman utama Point of Sale (tempat kasir melakukan transaksi)
-    Route::get('/kasir/pos', [PosController::class, 'index'])->name('pos.index'); // Nama rute: pos.index
+    Route::get('/kasir/pos', [PosController::class, 'index'])->name('pos.index');
     // Proses transaksi dari halaman POS
     Route::post('/kasir/pos/process', [PosController::class, 'processTransaction'])->name('kasir.processTransaction');
     // Halaman riwayat transaksi
-    Route::get('/kasir/transaksi', [PosController::class, 'transactionHistory'])->name('transactions.index'); // Nama rute: transactions.index
+    Route::get('/kasir/transaksi', [PosController::class, 'transactionHistory'])->name('transactions.index');
     // Halaman detail transaksi individual
     Route::get('/kasir/transaksi/{transaction}', [PosController::class, 'showTransactionDetail'])->name('kasir.transaksi.detail');
     // Halaman laporan penjualan
-    Route::get('/kasir/laporan', [PosController::class, 'salesReport'])->name('sales.report'); // Nama rute: sales.report
-    // Rute untuk Struk Belanja (Receipt)
+    Route::get('/kasir/laporan', [PosController::class, 'salesReport'])->name('sales.report');
+    // Rute untuk Struk Belanja (Receipt Show)
     Route::get('/kasir/receipt/{transaction}', [PosController::class, 'showReceipt'])->name('receipt.show');
+    // Rute BARU untuk CETAK Struk (Print View)
+    Route::get('/kasir/receipt/{transaction}/print', [PosController::class, 'printReceipt'])->name('receipt.print'); // <-- RUTE BARU
 
     // Rute Manajemen Produk
     Route::resource('products', ProductController::class);
@@ -63,6 +64,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/manager/dashboard', function () {
         return view('manager.dashboard');
     })->middleware('manager')->name('manager.dashboard');
+
 });
 
 // Rute otentikasi yang disediakan oleh Breeze

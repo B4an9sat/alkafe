@@ -257,7 +257,7 @@ class PosController extends Controller
      * @param  \App\Models\Transaction  $transaction
      * @return \Illuminate\View\View|\Illuminate\Http\Response
      */
-    public function showReceipt(Transaction $transaction)
+     public function showReceipt(Transaction $transaction)
     {
         /** @var \App\Models\User $authUser */
         $authUser = Auth::user();
@@ -271,5 +271,30 @@ class PosController extends Controller
         Log::info('Accessing Transaction Receipt page for Invoice:', ['invoice_number' => $transaction->invoice_number]);
 
         return view('kasir.receipt.show', compact('transaction'));
+    }
+
+    /**
+     * Menampilkan halaman khusus untuk mencetak struk transaksi.
+     * (METODE BARU UNTUK PRINT)
+     *
+     * @param  \App\Models\Transaction  $transaction
+     * @return \Illuminate\View\View
+     */
+    public function printReceipt(Transaction $transaction)
+    {
+        /** @var \App\Models\User $authUser */
+        $authUser = Auth::user();
+
+        // Verifikasi izin akses jika diperlukan
+        if (!$authUser->isAdmin() && !$authUser->isManager() && !$authUser->isCashier()) {
+            abort(403, 'Akses Ditolak. Anda tidak memiliki izin untuk mencetak struk transaksi.');
+        }
+
+        $transaction->load(['user', 'customer', 'transactionItems.product']);
+
+        Log::info('Generating print receipt for Invoice:', ['invoice_number' => $transaction->invoice_number]);
+
+        // Mengembalikan view print.blade.php yang baru dibuat
+        return view('kasir.receipt.print', compact('transaction'));
     }
 }
